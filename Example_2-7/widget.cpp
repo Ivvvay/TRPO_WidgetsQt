@@ -45,14 +45,14 @@ Widget::Widget(QWidget *parent)
 
     connect(exitButton,SIGNAL(clicked(bool)), this,SLOT(close()));                  // Поключение кнопки "выход" к слоту закрытия виджета
     connect(nextButton,SIGNAL(clicked(bool)), this,SLOT(begin()));                  // Кнопка "следующее" подключается к слоту очистки виджета и подготовки ео к следующему вводу
-    connect(inputEdit,SIGNAL(returnPressed()), this,SLOT(calc()));             // Нажатие клавиши "enter" в строке ввода подключается в вычислению результата
+    connect(inputEdit,SIGNAL(returnPressed()), this,SLOT(calc()));                  // Нажатие клавиши "enter" в строке ввода подключается в вычислению результата
 }
 
 Widget::~Widget()
 {
 }
 
-void Widget::begin()                                                                   // Слот для очистки виджета и подготовки его к новому вычислению
+void Widget::begin()                                                                // Слот для очистки виджета и подготовки его к новому вычислению
 {
 
     nextButton->setEnabled(false);                                                  // Отключаем кнопку Следующее
@@ -65,14 +65,14 @@ void Widget::begin()                                                            
     inputEdit->setFocus();
 }
 
-void Widget::calc()                                                                    // Слот для вычисления
+void Widget::calc()                                                                 // Слот для вычисления
 {
     bool Ok = true;                                                                 // Создаем флаг - корректен ли ввод?
     float r,a;                                                                      // Создаем переменные для вычисления квадрата
     QString str=inputEdit->text();                                                  // Копируем текст из строки ввода в строку QString
     a = str.toDouble(&Ok);                                                          // Конвертация строки в число, с проверкой
     if (Ok) {                                                                       // Если ввод корректен то
-        r = a*a;                                                                      // Вычисляем квадрат
+        r = a*a;                                                                    // Вычисляем квадрат
         str.setNum(r);
         outputEdit->setText(str);                                                   // Строку с числом записываем в строку вывода в виджете
         inputEdit->setEnabled(false);                                               // Отключаем строку ввода
@@ -84,7 +84,7 @@ void Widget::calc()                                                             
     } else
         if (!str.isEmpty()) {                                                       // Иначе и если строка ввода не пуста
             QMessageBox msgBox(QMessageBox::Information, "Возведение в квадрат",
-                                "Введено неверное значение.", QMessageBox::Ok);         // Окно с ошибкой                                        // Окно с ошибкой
+                                "Введено неверное значение.", QMessageBox::Ok);     // Окно с ошибкой                                        // Окно с ошибкой
             msgBox.exec();                                                                                                                                                   // Выводим
         }
 }
