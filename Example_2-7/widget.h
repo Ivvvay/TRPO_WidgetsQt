@@ -13,31 +13,31 @@ class Widget : public QWidget
     Q_OBJECT
 
 public:
-    Widget(QWidget *parent = nullptr);              // Конструктор
-    ~Widget();                                      // Деструктор
+    Widget(QWidget *parent = nullptr);
+    ~Widget();
 
 protected:
-    QFrame *frame;                                  // Рамка
-    QLabel *inputTitle;                             // Метка ввода
-    QLineEdit *inputEdit;                           // Строчный редактор ввода
-    QLabel *outputTitle;                            // Метка вывода
-    QLineEdit *outputEdit;                          // Строчный редактор вывода
-    QPushButton *nextButton;                        // Кнопка Следующее
-    QPushButton *exitButton;                        // Кнопка Выход
+    QFrame *frame;
+    QLabel *inputTitle;
+    QLineEdit *inputEdit;
+    QLabel *outputTitle;
+    QLineEdit *outputEdit;
+    QPushButton *nextButton;
+    QPushButton *exitButton;
 
 public slots:
-    void begin();                                   // Слот для очитки виджета и подготовки его к новому вычислению
-    void calc();                                    // Слот для вычисления
+    void begin();
+    void calc();
 };
 
-class StrValidator : public QValidator              // класс компонента проверки ввода
+class StrValidator : public QValidator
 {
 public:
-    StrValidator(QObject *parent):QValidator(parent){}
+    StrValidator(QObject *parent):QValidator(parent) {}
 
     virtual State validate(QString &str, int &pos) const
     {
-        return Acceptable;                          // метод всегда принимает вводимую строку
+        return Acceptable;
     }
 };
 

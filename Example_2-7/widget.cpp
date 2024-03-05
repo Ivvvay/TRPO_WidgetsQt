@@ -7,84 +7,100 @@
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
 {
-    QTextCodec::setCodecForLocale(QTextCodec::codecForName("Windows-1251"));        // Установка кодека для локализации виджета на русский язык
+    QTextCodec::setCodecForLocale(QTextCodec::codecForName("Windows-1251"));
     setWindowTitle("Возведение в квадрат");
 
-    frame = new QFrame(this);                                                       // Создание рамки
-    frame->setFrameShadow(QFrame::Raised);                                          // Установка ее внешнего вида как в скриншоте в задании
+    frame = new QFrame(this);
+    frame->setFrameShadow(QFrame::Raised);
     frame->setFrameShape(QFrame::Panel);
-    inputTitle = new QLabel("Введите число:", this);                                // Создание заголовка над строкой ввода
-    inputEdit = new QLineEdit("",this);                                             // Создание строки ввода
+    inputTitle = new QLabel("Введите число:", this);
+    inputEdit = new QLineEdit("",this);
 
-    StrValidator *v = new StrValidator(inputEdit);                                  // Создание объекта проверки ввода для строки ввода
-    inputEdit->setValidator(v);                                                     // Подключение его к сроке ввода
+    StrValidator *v = new StrValidator(inputEdit);
+    inputEdit->setValidator(v);
 
-    outputTitle = new QLabel("Результат:", this);                                   // Создание заголовка над строкой вывода
+    outputTitle = new QLabel("Результат:", this);
     outputEdit = new QLineEdit("",this);
 
-    nextButton = new QPushButton("Следующее", this);                                // Создание кнопки Следующее
-    exitButton = new QPushButton("Выход", this);                                    // Создание кнопки Выхода
+    nextButton = new QPushButton("Следующее", this);
+    exitButton = new QPushButton("Выход", this);
 
-    QVBoxLayout *vLayoutForNumbers = new QVBoxLayout(frame);                        // Создаем в рамке вертикальную разметку
+    QVBoxLayout *vLayoutForNumbers = new QVBoxLayout(frame);
     vLayoutForNumbers->addWidget(inputTitle);
     vLayoutForNumbers->addWidget(inputEdit);
     vLayoutForNumbers->addWidget(outputTitle);
     vLayoutForNumbers->addWidget(outputEdit);
-    vLayoutForNumbers->addStretch();                                                // Добавляем растягиваемое пространство
+    vLayoutForNumbers->addStretch();
 
-    QVBoxLayout *vLayoutForButtons = new QVBoxLayout();                             // Такая же вертикальная разметка с кнопками
+    QVBoxLayout *vLayoutForButtons = new QVBoxLayout();
     vLayoutForButtons->addWidget(nextButton);
     vLayoutForButtons->addWidget(exitButton);
     vLayoutForButtons->addStretch();
 
-    QHBoxLayout *hLayoutGeneral = new QHBoxLayout(this);                            // Создаем горизонтальную разметку
-    hLayoutGeneral->addWidget(frame);                                               // Помещаем туда рамку
+    QHBoxLayout *hLayoutGeneral = new QHBoxLayout(this);
+    hLayoutGeneral->addWidget(frame);
     hLayoutGeneral->addLayout(vLayoutForButtons);
 
-    begin();                                                                        // Вызываем слот reset для подготовки виджета к вводу
+    begin();
 
-    connect(exitButton,SIGNAL(clicked(bool)), this,SLOT(close()));                  // Поключение кнопки "выход" к слоту закрытия виджета
-    connect(nextButton,SIGNAL(clicked(bool)), this,SLOT(begin()));                  // Кнопка "следующее" подключается к слоту очистки виджета и подготовки ео к следующему вводу
-    connect(inputEdit,SIGNAL(returnPressed()), this,SLOT(calc()));                  // Нажатие клавиши "enter" в строке ввода подключается в вычислению результата
+    connect(exitButton,SIGNAL(clicked(bool)), this, SLOT(close()));
+    connect(nextButton,SIGNAL(clicked(bool)), this, SLOT(begin()));
+    connect(inputEdit,SIGNAL(returnPressed()), this, SLOT(calc()));
 }
 
 Widget::~Widget()
 {
 }
 
-void Widget::begin()                                                                // Слот для очистки виджета и подготовки его к новому вычислению
+void Widget::begin()
 {
-
-    nextButton->setEnabled(false);                                                  // Отключаем кнопку Следующее
+    nextButton->setEnabled(false);
     nextButton->setDefault(false);
-    inputEdit->clear();                                                             // Очищаем строку ввода
-    inputEdit->setEnabled(true);                                                    // Включаем её для ввода
-    outputTitle->setVisible(false);                                                 // Скрываем заголовок
-    outputEdit->setVisible(false);                                                  // Скрываем строку вывода
-    outputEdit->setEnabled(false);                                                  // Выключаем строку вывода
+    inputEdit->clear();
+    inputEdit->setEnabled(true);
+    outputTitle->setVisible(false);
+    outputEdit->setVisible(false);
+    outputEdit->setEnabled(false);
     inputEdit->setFocus();
 }
 
-void Widget::calc()                                                                 // Слот для вычисления
+void Widget::calc()
 {
-    bool Ok = true;                                                                 // Создаем флаг - корректен ли ввод?
-    float r,a;                                                                      // Создаем переменные для вычисления квадрата
-    QString str=inputEdit->text();                                                  // Копируем текст из строки ввода в строку QString
-    a = str.toDouble(&Ok);                                                          // Конвертация строки в число, с проверкой
-    if (Ok) {                                                                       // Если ввод корректен то
-        r = a*a;                                                                    // Вычисляем квадрат
-        str.setNum(r);
-        outputEdit->setText(str);                                                   // Строку с числом записываем в строку вывода в виджете
-        inputEdit->setEnabled(false);                                               // Отключаем строку ввода
-        outputTitle->setVisible(true);
-        outputEdit->setVisible(true);
-        nextButton->setDefault(true);                                               // Кнопка Следующее доступна и становится кнопкой по умолчанию
-        nextButton->setEnabled(true);
-        nextButton->setFocus();
-    } else
-        if (!str.isEmpty()) {                                                       // Иначе и если строка ввода не пуста
-            QMessageBox msgBox(QMessageBox::Information, "Возведение в квадрат",
-                                "Введено неверное значение.", QMessageBox::Ok);     // Окно с ошибкой                                        // Окно с ошибкой
-            msgBox.exec();                                                                                                                                                   // Выводим
+    bool Ok = true;
+    float r,a;
+    QString str=inputEdit->text();
+
+    try {
+        a = str.toDouble(&Ok);
+
+        if(!qIsFinite(a)) {
+            throw std::overflow_error("Переполнение");
         }
+
+        if (Ok) {
+            r = a*a;
+
+            if(!qIsFinite(r)) {
+                throw std::overflow_error("Переполнение");
+            }
+
+            str.setNum(r);
+            outputEdit->setText(str);
+            inputEdit->setEnabled(false);
+            outputTitle->setVisible(true);
+            outputEdit->setVisible(true);
+            nextButton->setDefault(true);
+            nextButton->setEnabled(true);
+            nextButton->setFocus();
+        } else
+            if (!str.isEmpty()) {
+                throw std::invalid_argument("Введено неверное значение.");
+            }
+    } catch (std::exception &e) {
+        QMessageBox msgBox(QMessageBox::Information, "Возведение в квадрат.",
+                           e.what(), QMessageBox::Ok);
+        msgBox.exec();
+        inputEdit->clear();
+    }
+
 }
