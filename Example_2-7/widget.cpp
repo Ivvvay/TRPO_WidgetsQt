@@ -43,9 +43,9 @@ Widget::Widget(QWidget *parent)
 
     begin();
 
-    connect(exitButton,SIGNAL(clicked(bool)), this, SLOT(close()));
-    connect(nextButton,SIGNAL(clicked(bool)), this, SLOT(begin()));
-    connect(inputEdit,SIGNAL(returnPressed()), this, SLOT(calc()));
+    connect(exitButton, &QPushButton::clicked, this, &Widget::close);
+    connect(nextButton, &QPushButton::clicked, this, &Widget::begin);
+    connect(inputEdit, &QLineEdit::returnPressed, this, &Widget::calc);
 }
 
 Widget::~Widget()
@@ -54,9 +54,10 @@ Widget::~Widget()
 
 void Widget::begin()
 {
+    inputEdit->clear();
     nextButton->setEnabled(false);
     nextButton->setDefault(false);
-    inputEdit->clear();
+
     inputEdit->setEnabled(true);
     outputTitle->setVisible(false);
     outputEdit->setVisible(false);
