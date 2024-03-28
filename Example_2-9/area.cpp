@@ -2,41 +2,42 @@
 
 Area::Area(QWidget *parent):QWidget(parent)
 {
-    setFixedSize(QSize(300,200));                   // Установка зафиксированного размера виджета
-    myline=new MyLine(80, 100, 50);                 // Создание фигур
-    myrect=new MyRect(220, 100, 50);
-    alpha=0;                                        // Инициаллизация начального угла поворота фигур
+    setFixedSize(QSize(300,200));
+    myline = new MyLine(80, 100, 50);
+    myrect = new MyRect(220, 100, 50);
+    alpha = 0;
 }
 
-void Area::showEvent(QShowEvent *)                  // Обработчик события появления виджета
+void Area::showEvent(QShowEvent *)
 {
-    myTimer=startTimer(50);                         // Создать таймер
+    myTimer = startTimer(50);
 }
 
-void Area::paintEvent(QPaintEvent *)                // Обработчик события отрисовки виджета
+void Area::paintEvent(QPaintEvent *)
 {
-    QPainter painter(this);                         // Создание объекта рисования
-    painter.setPen(Qt::red);                        // Назначение ему красного цвета
-    myline->move(alpha,&painter);                   // Движение линии
-    myrect->move(alpha*(-0.5),&painter);            // Движение прямоугольника
+    QPainter painter(this);
+    painter.setPen(Qt::red);
+
+    myline->move(alpha, &painter);
+    myrect->move(alpha*(-0.5), &painter);
 }
 
-void Area::timerEvent(QTimerEvent *event)           // Обработчик таймера
+void Area::timerEvent(QTimerEvent *event)
 {
-    if (event->timerId() == myTimer) {              // Если наш таймер
-        alpha += 0.2;                               // Изменение угла
-        update();                                   // Обновить внешний вид
+    if (event->timerId() == myTimer) {
+        alpha += 0.2;
+        update();
     } else
-        QWidget::timerEvent(event);                 // Иначе передать для стандартной обработки
+        QWidget::timerEvent(event);
 }
 
-void Area::hideEvent(QHideEvent *)                  // Обработчик события когда виджет скрыли
+void Area::hideEvent(QHideEvent *)
 {
-    killTimer(myTimer);                             // Уничножить таймер
+    killTimer(myTimer);
 }
 
-Area::~Area()                                       // Деструктор виджета
+Area::~Area()
 {
-    delete myline;                                  // Удаление линии
-    delete myrect;                                  // Удаление прямоуг
+    delete myline;
+    delete myrect;
 }

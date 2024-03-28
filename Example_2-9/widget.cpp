@@ -5,16 +5,17 @@
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
 {
-    QTextCodec::setCodecForLocale(QTextCodec::codecForName("Windows-1251"));    // Кодек для локализации на русском
-    this->setWindowTitle("Обработка событий");                                  // Заголовок окна
-    area = new Area(this);                                                      // Создание Area
-    btn = new QPushButton("Завершить",this );                                   // Создание Кнопки
-    QVBoxLayout *layout = new QVBoxLayout(this);                                // Вертикальная разметка
+    QTextCodec::setCodecForLocale(QTextCodec::codecForName("Windows-1251"));
+    this->setWindowTitle("Обработка событий");
 
-    layout->addWidget(area);                                                    // Помещение на вертикальную разметку зону с фигурами и кнопку
+    area = new Area(this);
+    btn = new QPushButton("Завершить",this );
+
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    layout->addWidget(area);
     layout->addWidget(btn);
 
-    connect(btn, SIGNAL(clicked(bool)),this,SLOT(close()));                     // Подключение сигнала нажатия кнопки к слоту закрытия окна
+    connect(btn, &QPushButton::clicked, this, &Widget::close);
 }
 
 Widget::~Widget()

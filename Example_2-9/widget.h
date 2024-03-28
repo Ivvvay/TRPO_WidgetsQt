@@ -10,8 +10,8 @@ class Widget : public QWidget
     Q_OBJECT
 
 protected:
-    Area * area;                                    // Область рисунка
-    QPushButton * btn;                              // Кнопка выхода
+    Area * area;
+    QPushButton * btn;
 
 public:
     Widget(QWidget *parent = nullptr);

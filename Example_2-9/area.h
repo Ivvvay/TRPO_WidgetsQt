@@ -5,23 +5,24 @@
 #include <QWidget>
 #include <QTimerEvent>
 
-class Area : public QWidget         // Виджет с крутящимися линией и прямоугольником
+class Area : public QWidget
 {
 private:
-    int myTimer;                    // Таймер
-    float alpha;                    // Угол поворота
+    int myTimer;
+    float alpha;
+
 public:
     Area(QWidget *parent = 0);
     ~Area();
-    MyLine *myline;                 // Линия
-    MyRect *myrect;                 // Прямоугольник
+
+    MyLine *myline;
+    MyRect *myrect;
 
 protected:
-    // Обработчики событий
-    void paintEvent(QPaintEvent *event);        // Обработчик события отрисовки виджета
-    void timerEvent(QTimerEvent *event);        // Обработчик события таймера
-    void showEvent(QShowEvent *event);          // Обработчик события появления виджета
-    void hideEvent(QHideEvent *event);          // Обработчик события когда виджет скрыли
+    void paintEvent(QPaintEvent *event);
+    void timerEvent(QTimerEvent *event);
+    void showEvent(QShowEvent *event);
+    void hideEvent(QHideEvent *event);
 };
 
 #endif // AREA_H

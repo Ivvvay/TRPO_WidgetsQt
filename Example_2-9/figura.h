@@ -3,34 +3,39 @@
 
 #include <QPainter>
 
-class Figura                                                // Абстрактный класс, используется как родитель для создания конкретных фигур
+class Figura
 {
 protected:
-    int x,y,halfLength,dx,dy;                               // Координаты расположения центра фигуры, Половина от длины фигуры и Координаты вектора, указывающего наклон фигуры
+    int x, y, halfLength, dx, dy;
 
-    virtual void draw(QPainter *Painter)=0;                 // Виртуальная функция для отрисовки фигуры
+    virtual void draw(QPainter *Painter) = 0;
+
 public:
     Figura(int X,int Y,int Halflen)
-        : x(X),y(Y),halfLength(Halflen) {}                  // Конструктор(определяет положение фигуры(x, y)
+        : x(X),y(Y),halfLength(Halflen) {}
 
-    void move(float Alpha,QPainter *Painter);               // Функция движения фигуры
+    void move(float Alpha,QPainter *Painter);
 };
 
-class MyLine : public Figura                                  // Класс линии
+class MyLine : public Figura
 {
 protected:
     void draw(QPainter *Painter);
+
 public:
-    MyLine(int x,int y,int halflen):Figura(x,y,halflen){}
+    MyLine(int x,int y,int halflen)
+        : Figura(x,y,halflen){}
 };
 
 
-class MyRect : public Figura                                  //Класс прямоугольника
+class MyRect : public Figura
 {
 protected:
     void draw(QPainter *Painter);
+
 public:
-    MyRect(int x,int y,int halflen):Figura(x,y,halflen){}
+    MyRect(int x,int y,int halflen)
+        : Figura(x,y,halflen){}
 };
 
 #endif // FIGURA_H
