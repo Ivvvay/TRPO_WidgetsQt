@@ -1,57 +1,68 @@
 #include "widget.h"
 #include <QTextCodec>
 #include <QBoxLayout>
+#include <QMessageBox>
 
-void Counter::add_one()                                         // Слот, добавляющий 1 к счетчику
+void Counter::add_one()
 {
-    QString str = text();                                       // Считываем текст из счетчика
-    int r = str.toInt();                                        // Конвертация текста в число
+    QString str = text();
+    int r = str.toInt();
 
-    if (r != 0 && r % 5 == 0) {                                  // Если счетчик кратен 5, то вызывается соответсвующий сигнал
+    r++;
+
+    if (r != 0 && r % 5 == 0) {
         emit tick_signal();
     }
 
-    r++;
-    str.setNum(r);                                              // Конвертируем это число обратно в строку
-    setText(str);                                               // Записываем строку в счетчик
+    str.setNum(r);
+    setText(str);
 }
 
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
 {
-    QTextCodec::setCodecForLocale(QTextCodec::codecForName("Windows-1251"));        // Установка кодека для русификации виджета
+    QTextCodec::setCodecForLocale(QTextCodec::codecForName("Windows-1251"));
 
-    this->setWindowTitle("Счетчик");                                                // Заголовок
-    label1 = new QLabel("Cчет по 1",this);                                          // Заголовок счётчика по 1
-    label2 = new QLabel("Cчет по 5",this);                                          // Заголовок счётчика по 2
-    edit1 = new Counter("0",this);                                                  // Создание 2-х счетчиков - для счета по 1 и по 5
-    edit2 = new Counter("0",this);
+    this->setWindowTitle("Счетчик");
 
-    calcbutton=new QPushButton("+1",this);                                          // Кнопка +1
-    exitbutton=new QPushButton("Выход",this);                                       // Кнопка Выход
+    try {
+        label1 = new QLabel("Cчет по 1",this);
+        label2 = new QLabel("Cчет по 5",this);
+        edit1 = new Counter("0",this);
+        edit2 = new Counter("0",this);
 
-    QHBoxLayout *layout1 = new QHBoxLayout();                                       // Создание разметки для заголовков
-    layout1->addWidget(label1);
-    layout1->addWidget(label2);
+        calcbutton = new QPushButton("+1",this);
+        exitbutton = new QPushButton("Выход",this);
 
-    QHBoxLayout *layout2 = new QHBoxLayout();                                       // Создание разметки для счетчиков
-    layout2->addWidget(edit1);
-    layout2->addWidget(edit2);
+        QHBoxLayout *layout1 = new QHBoxLayout();
+        layout1->addWidget(label1);
+        layout1->addWidget(label2);
 
-    QHBoxLayout *layout3 = new QHBoxLayout();                                       // Создание разметки для кнопок
-    layout3->addWidget(calcbutton);
-    layout3->addWidget(exitbutton);
+        QHBoxLayout *layout2 = new QHBoxLayout();
+        layout2->addWidget(edit1);
+        layout2->addWidget(edit2);
 
-    QVBoxLayout *layout4 = new QVBoxLayout(this);                                   // Создание главной разметки для виджета
-    layout4->addLayout(layout1);
-    layout4->addLayout(layout2);
-    layout4->addLayout(layout3);
-    layout4->addStretch();                                                          // Добавление отступа в главный виджет для корректного отображения при масштабировании окна
+        QHBoxLayout *layout3 = new QHBoxLayout();
+        layout3->addWidget(calcbutton);
+        layout3->addWidget(exitbutton);
 
-    // Cвязь сигнала нажатия кнопки и слота закрытия окна
-    connect(calcbutton,SIGNAL(clicked(bool)), edit1,SLOT(add_one()));
-    connect(edit1,SIGNAL(tick_signal()), edit2,SLOT(add_one()));
-    connect(exitbutton,SIGNAL(clicked(bool)), this,SLOT(close()));
+        QVBoxLayout *layout4 = new QVBoxLayout(this);
+        layout4->addLayout(layout1);
+        layout4->addLayout(layout2);
+        layout4->addLayout(layout3);
+        layout4->addStretch();
+
+    } catch (std::bad_alloc&) {
+        QMessageBox::critical(this, "Ошибка", "Не удалось выделить память для одного из объектов");
+        exit(1);
+    }
+
+    edit1->setEnabled(false);
+    edit2->setEnabled(false);
+
+    connect(calcbutton,&QPushButton::clicked, edit1, &Counter::add_one);
+    connect(edit1, &Counter::tick_signal, edit2, &Counter::add_one);
+    connect(exitbutton, &QPushButton::clicked, this, &Widget::close);
 }
 
 Widget::~Widget()

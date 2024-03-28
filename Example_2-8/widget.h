@@ -6,18 +6,18 @@
 #include <QLabel>
 #include <QPushButton>
 
-class Counter : public QLineEdit                                    // Класс виджета строки счетчика
+class Counter : public QLineEdit
 {
-    Q_OBJECT                                                        // Макрос подключения слотов и сигналов к классу
+    Q_OBJECT
 public:
-    Counter(const QString &contents, QWidget *parent=0)            // Конструктор
-        : QLineEdit(contents,parent) {}
+    Counter(const QString &contents, QWidget *parent = nullptr)
+        : QLineEdit(contents, parent) {}
 
 signals:
-    void tick_signal();                                             // Сигнал, срабатывает когда счетчик кратен 5
+    void tick_signal();
 
 public slots:
-    void add_one();                                                 // Слот, добавляющий 1 к счетчику
+    void add_one();
 
 };
 
@@ -25,10 +25,10 @@ class Widget : public QWidget
 {
     Q_OBJECT
 protected:
-    QLabel *label1,*label2;                                         // Заголовки над счетчиками
-    Counter *edit1,*edit2;                                          // Счетчики
-    QPushButton *calcbutton;                                        // Кнопка добавления 1 к счетчику
-    QPushButton *exitbutton;                                        // Кнопка Выход
+    QLabel *label1, *label2;
+    Counter *edit1, *edit2;
+    QPushButton *calcbutton;
+    QPushButton *exitbutton;
 
 public:
     Widget(QWidget *parent = nullptr);
